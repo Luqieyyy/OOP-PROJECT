@@ -259,14 +259,14 @@ public class GymBookingSystem {
         Admin admin = new Admin("admin123", "password123");
         BookingManager bookingManager = new BookingManager();
 
-        System.out.println("Welcome to Gym Booking System!");
+        System.out.println("Welcome to Gym Booking System!\n");
         System.out.print("Enter Admin ID: ");
         String adminId = scanner.nextLine();
         System.out.print("Enter Password: ");
         String password = scanner.nextLine();
 
         if (admin.login(adminId, password)) {
-            System.out.println("Login successful!");
+            System.out.println("\nLogin successful!");
 
             while (true) {
                 System.out.println("\n1. Add Booking");
@@ -276,9 +276,10 @@ public class GymBookingSystem {
                 System.out.println("5. Reschedule Booking");
                 System.out.println("6. Search Bookings by Date");
                 System.out.println("7. Exit");
-                System.out.print("Choose an option: ");
+                System.out.print("\nChoose an option: ");
                 int choice = scanner.nextInt();
                 scanner.nextLine();
+                System.out.print("\n");
 
                 switch (choice) {
                     case 1 -> addBooking(scanner, bookingManager);
