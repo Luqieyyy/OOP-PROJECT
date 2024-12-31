@@ -180,7 +180,7 @@ class BookingManager {
             saveBookingsToFile();
             System.out.println("Booking deleted successfully.");
         } else {
-            System.out.println("Invalid booking index.");
+            System.out.println("\nInvalid booking index.");
         }
     }
 
@@ -218,7 +218,7 @@ class BookingManager {
             saveBookingsToFile();
             System.out.println("Payment status updated.");
         } else {
-            System.out.println("Invalid booking index.");
+            System.out.println("\nInvalid booking index.");
         }
     }
 
@@ -243,7 +243,7 @@ class BookingManager {
             saveBookingsToFile();
             System.out.println("\nBooking rescheduled successfully!");
         } else {
-            System.out.println("Invalid booking index.");
+            System.out.println("\nInvalid booking index.");
         }
     }
 
@@ -340,7 +340,7 @@ public class GymBookingSystem {
                 }
             }
         } else {
-            System.out.println("Login failed! Exiting system.");
+            System.out.println("\nLogin failed! Exiting system.");
         }
     }
 
