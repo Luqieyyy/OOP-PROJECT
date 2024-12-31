@@ -78,6 +78,10 @@ class Booking extends User {
         return membershipType;
     }
 
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
     public boolean getPaymentStatus() {
         return paymentStatus;
     }
@@ -103,10 +107,32 @@ class Booking extends User {
     }
 
     public String getDetails() {
-        return "User: " + getName() + ", Date: " + date + ", Time: " + time + ", Amount: RM" + amount
-                + ", Membership Type: " + membershipType + ", Payment Method: " + paymentMethod
-                + ", Payment Status: " + (paymentStatus ? "Yes" : "No");
-    }
+	    return String.format(
+	        "+-------------------+--------------------------+\n" +
+	        "| Field             | Value                    |\n" +
+	        "+-------------------+--------------------------+\n" +
+	        "| Name              | %-24s |\n" +
+	        "| IC/Passport       | %-24s |\n" +
+	        "| Phone             | %-24s |\n" +
+	        "| Date              | %-24s |\n" +
+	        "| Time              | %-24s |\n" +
+	        "| Amount            | RM%-22.2f |\n" +
+	        "| Membership Type   | %-24s |\n" +
+	        "| Payment Method    | %-24s |\n" +
+	        "| Payment Status    | %-24s |\n" +
+	        "+-------------------+--------------------------+",
+	        getName(),
+	        getIcPass(),
+	        getPhone(),
+	        getDate(),
+	        getTime(),
+	        getAmount(),
+	        getMembershipType(),
+	        getPaymentMethod(),
+	        getPaymentStatus() ? "Paid" : "Not Paid"
+	    );
+	}
+
 
     public String toFileString() {
         return getName() + "|" + getIcPass() + "|" + getPhone() + "|" + date + "|" + time + "|"
@@ -120,7 +146,7 @@ class Booking extends User {
                 throw new IllegalArgumentException("Invalid data format");
             }
             return new Booking(parts[0], parts[1], parts[2], parts[3], parts[4],
-                               Double.parseDouble(parts[5]), parts[6], parts[7], Boolean.parseBoolean(parts[8]));
+                    Double.parseDouble(parts[5]), parts[6], parts[7], Boolean.parseBoolean(parts[8]));
         } catch (Exception e) {
             System.out.println("Error parsing booking data: " + e.getMessage());
             return null;
@@ -142,7 +168,7 @@ class BookingManager {
         if (checkCapacity(booking.getDate(), booking.getTime())) {
             bookings.add(booking);
             saveBookingsToFile();
-            System.out.println("Booking added successfully!");
+            System.out.println("\nBooking added successfully!");
         } else {
             System.out.println("Cannot add booking. Time slot is full.");
         }
@@ -161,11 +187,29 @@ class BookingManager {
     public void listBookings() {
         if (bookings.isEmpty()) {
             System.out.println("No bookings available.");
-        } else {
-            for (int i = 0; i < bookings.size(); i++) {
-                System.out.println((i + 1) + ". " + bookings.get(i).getDetails());
-            }
+            return;
         }
+
+        // Print table header
+        System.out.printf("%-5s %-20s %-15s %-15s %-12s %-10s %-15s %-15s %-5s\n",
+                "No.", "Name", "IC/Passport", "Phone", "Date", "Time", "Membership", "Payment Method", "Paid?");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+
+        // Print each booking in the table
+        for (int i = 0; i < bookings.size(); i++) {
+            Booking b = bookings.get(i);
+            System.out.printf("%-5d %-20s %-15s %-15s %-12s %-10s %-15s %-15s %-5s\n",
+                    i + 1,
+                    b.getName(),
+                    b.getIcPass(),
+                    b.getPhone(),
+                    b.getDate(),
+                    b.getTime(),
+                    b.getMembershipType(),
+                    b.getPaymentMethod(),
+                    b.getPaymentStatus() ? "Yes" : "No");
+        }
+        System.out.print("\n");
     }
 
     public void updatePaymentStatus(int bookingIndex, boolean status) {
@@ -181,10 +225,10 @@ class BookingManager {
     public void rescheduleBooking(int bookingIndex, Scanner scanner) {
         if (bookingIndex >= 0 && bookingIndex < bookings.size()) {
             Booking booking = bookings.get(bookingIndex);
-            System.out.println("Current Booking Details:");
+            System.out.println("\nCurrent Booking Details:\n");
             System.out.println(booking.getDetails());
 
-            System.out.print("Enter new date (dd/mm/yyyy): ");
+            System.out.print("\nEnter new date (dd/mm/yyyy): ");
             String newDate = scanner.nextLine();
             System.out.print("Enter new time (e.g., 10:00 AM or 02:30 PM): ");
             String newTime = scanner.nextLine();
@@ -197,7 +241,7 @@ class BookingManager {
             booking.setDate(newDate);
             booking.setTime(newTime);
             saveBookingsToFile();
-            System.out.println("Booking rescheduled successfully!");
+            System.out.println("\nBooking rescheduled successfully!");
         } else {
             System.out.println("Invalid booking index.");
         }
@@ -253,7 +297,7 @@ class BookingManager {
 }
 
 // Main system
-public class GymBookingSystem {
+public class gymtest2 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Admin admin = new Admin("admin123", "password123");
@@ -313,9 +357,10 @@ public class GymBookingSystem {
         System.out.print("Enter time (e.g., 10:00 AM or 02:30 PM): ");
         String time = scanner.nextLine();
 
-        System.out.println("Choose membership type:");
+        System.out.println("\nMembership type:");
         System.out.println("1. Pay Per Day (RM10/day)");
         System.out.println("2. Membership");
+        System.out.print("\nChoose membership type: ");
         int membershipChoice = scanner.nextInt();
         scanner.nextLine();
 
@@ -325,9 +370,10 @@ public class GymBookingSystem {
             membershipType = "Pay Per Day";
             amount = 10;
         } else {
-            System.out.println("Choose Membership Plan:");
+            System.out.println("\nMembership Plan:");
             System.out.println("1. Monthly (RM100)");
             System.out.println("2. Annually (RM1000)");
+            System.out.print("\nChoose membership plan: ");
             int planChoice = scanner.nextInt();
             scanner.nextLine();
 
@@ -340,10 +386,11 @@ public class GymBookingSystem {
             }
         }
 
-        System.out.println("Choose payment method:");
+        System.out.println("\nPayment method:");
         System.out.println("1. Cash");
         System.out.println("2. QR");
         System.out.println("3. Transfer");
+        System.out.print("\nChoose payment method: ");
         int paymentChoice = scanner.nextInt();
         scanner.nextLine();
 
@@ -351,32 +398,28 @@ public class GymBookingSystem {
             case 1 -> "Cash";
             case 2 -> "QR";
             case 3 -> "Transfer";
-            default -> "Cash";
+            default -> "Unknown";
         };
 
-        System.out.print("Is the payment completed? (Yes/No): ");
-        String paymentStatusInput = scanner.nextLine().trim().toLowerCase();
-        boolean paymentStatus = paymentStatusInput.equals("yes");
+        System.out.print("\nPayment made? (y/n): ");
+        boolean paymentStatus = scanner.nextLine().equalsIgnoreCase("y");
 
         Booking booking = new Booking(name, icPass, phone, date, time, amount, membershipType, paymentMethod, paymentStatus);
         bookingManager.addBooking(booking);
     }
 
     private static void updatePaymentStatus(Scanner scanner, BookingManager bookingManager) {
-        bookingManager.listBookings();
         System.out.print("Enter booking number to update payment status: ");
         int bookingIndex = scanner.nextInt() - 1;
         scanner.nextLine();
 
-        System.out.print("Set payment status to (true/false): ");
-        boolean status = scanner.nextBoolean();
-        scanner.nextLine();
+        System.out.print("Payment made? (y/n): ");
+        boolean status = scanner.nextLine().equalsIgnoreCase("y");
 
         bookingManager.updatePaymentStatus(bookingIndex, status);
     }
 
     private static void deleteBooking(Scanner scanner, BookingManager bookingManager) {
-        bookingManager.listBookings();
         System.out.print("Enter booking number to delete: ");
         int bookingIndex = scanner.nextInt() - 1;
         scanner.nextLine();
@@ -385,7 +428,6 @@ public class GymBookingSystem {
     }
 
     private static void rescheduleBooking(Scanner scanner, BookingManager bookingManager) {
-        bookingManager.listBookings();
         System.out.print("Enter booking number to reschedule: ");
         int bookingIndex = scanner.nextInt() - 1;
         scanner.nextLine();
@@ -396,6 +438,7 @@ public class GymBookingSystem {
     private static void searchBookingsByDate(Scanner scanner, BookingManager bookingManager) {
         System.out.print("Enter date to search (dd/mm/yyyy): ");
         String date = scanner.nextLine();
+        System.out.print("\n");
 
         bookingManager.searchBookingsByDate(date);
     }
