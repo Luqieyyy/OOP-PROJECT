@@ -91,10 +91,6 @@ class Booking extends User {
         this.time = time;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     public void setMembershipType(String membershipType) {
         this.membershipType = membershipType;
     }
@@ -154,7 +150,7 @@ class Booking extends User {
 class BookingManager {
     private ArrayList<Booking> bookings = new ArrayList<>();
     private static final String FILENAME = "gym_bookings.txt";
-    private static final int MAX_CAPACITY_PER_SLOT = 5;
+    private static final int MAX_CAPACITY_PER_SLOT = 10;
 
     public BookingManager() {
         loadBookingsFromFile();
