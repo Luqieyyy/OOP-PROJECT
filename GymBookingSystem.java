@@ -131,7 +131,7 @@ class Booking extends User {
         return getName() + "|" + getIcPass() + "|" + getPhone() + "|" + date + "|" + time + "|"
                 + amount + "|" + membershipType + "|" + paymentMethod + "|" + (paymentStatus ? "yes" : "no");
     }
-    
+
 
     public static Booking fromFileString(String fileString) {
         try {
@@ -147,7 +147,7 @@ class Booking extends User {
             return null;
         }
     }
-    
+
 }
 
 class BookingManager {
@@ -184,12 +184,12 @@ class BookingManager {
             System.out.println("No bookings available.\n");
             return;
         }
-    
+
         // Print table header
         System.out.printf("%-5s %-20s %-15s %-15s %-12s %-10s %-12s %-15s %-15s %-8s\n",
                 "No.", "Name", "IC/Passport", "Phone", "Date", "Time", "Amount (RM)", "Membership", "Payment Method", "Paid?");
         System.out.println("------------------------------------------------------------------------------------------------------------------------------------");
-    
+
         // Print each booking in the table
         for (int i = 0; i < bookings.size(); i++) {
             Booking b = bookings.get(i);
@@ -207,7 +207,7 @@ class BookingManager {
         }
         System.out.println("\n");
     }
-    
+
 
     public void updatePaymentStatus(int bookingIndex, boolean status) {
         if (bookingIndex >= 0 && bookingIndex < bookings.size()) {
@@ -231,7 +231,7 @@ class BookingManager {
             String newTime = scanner.nextLine();
 
             if (!checkCapacity(newDate, newTime)) {
-                System.out.println("Cannot reschedule. Time slot is full.");
+                System.out.println("\nCannot reschedule. Time slot is full.\n");
                 return;
             }
 
@@ -253,7 +253,7 @@ class BookingManager {
             }
         }
         if (!found) {
-            System.out.println("No bookings found for the date " + date);
+            System.out.println("No bookings found for the date " + date + "\n");
         }
     }
 
@@ -294,7 +294,7 @@ class BookingManager {
 }
 
 // Main system
-public class GymBookingSystem {
+public class gymtest2 {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Admin admin = new Admin("admin123", "password123");
@@ -472,12 +472,12 @@ public class GymBookingSystem {
 		                amount = 1000;
 		                break;
 		            } else {
-		                System.out.println("Invalid option. Please choose 1 for Monthly or 2 for Annually.");
+		                System.out.println("\nInvalid option. Please choose 1 for Monthly or 2 for Annually.");
 		            }
 		        }
 		        break;
 		    } else {
-		        System.out.println("Invalid option. Please choose 1 for Pay Per Day or 2 for Membership.");
+		        System.out.println("\nInvalid option. Please choose 1 for Pay Per Day or 2 for Membership.");
 		    }
 		}
 
@@ -502,7 +502,7 @@ public class GymBookingSystem {
 		        paymentMethod = "Transfer";
 		        break;
 		    } else {
-		        System.out.println("Invalid option. Please choose 1 for Cash, 2 for QR, or 3 for Transfer.");
+		        System.out.println("\nInvalid option. Please choose 1 for Cash, 2 for QR, or 3 for Transfer.");
 		    }
 		}
 
@@ -535,7 +535,7 @@ public class GymBookingSystem {
         String paymentInput;
 		boolean status;
 		while (true) {
-		    System.out.print("Payment made? (y/n): ");
+		    System.out.print("\nPayment made? (y/n): ");
 		    paymentInput = scanner.nextLine().trim().toLowerCase();
 
 		    if (paymentInput.equals("y")) {
