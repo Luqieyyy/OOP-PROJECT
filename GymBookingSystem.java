@@ -294,7 +294,7 @@ class BookingManager {
 }
 
 // Main system
-public class gymtest2 {
+public class GymBookingSystem {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Admin admin = new Admin("admin123", "password123");
