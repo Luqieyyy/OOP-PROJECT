@@ -129,8 +129,9 @@ class Booking extends User {
 
     public String toFileString() {
         return getName() + "|" + getIcPass() + "|" + getPhone() + "|" + date + "|" + time + "|"
-                + amount + "|" + membershipType + "|" + paymentMethod + "|" + paymentStatus;
+                + amount + "|" + membershipType + "|" + paymentMethod + "|" + (paymentStatus ? "yes" : "no");
     }
+
 
     public static Booking fromFileString(String fileString) {
         try {
@@ -138,13 +139,15 @@ class Booking extends User {
             if (parts.length != 9) {
                 throw new IllegalArgumentException("Invalid data format");
             }
-            return new Booking(parts[0], parts[1], parts[2], parts[3], parts[4],
-                    Double.parseDouble(parts[5]), parts[6], parts[7], Boolean.parseBoolean(parts[8]));
+            double amount = Double.parseDouble(parts[5]); // Parse amount
+            boolean paymentStatus = parts[8].trim().equalsIgnoreCase("yes"); // Parse payment status
+            return new Booking(parts[0], parts[1], parts[2], parts[3], parts[4], amount, parts[6], parts[7], paymentStatus);
         } catch (Exception e) {
             System.out.println("Error parsing booking data: " + e.getMessage());
             return null;
         }
     }
+
 }
 
 class BookingManager {
@@ -183,26 +186,28 @@ class BookingManager {
         }
 
         // Print table header
-        System.out.printf("%-5s %-20s %-15s %-15s %-12s %-10s %-15s %-15s %-5s\n",
-                "No.", "Name", "IC/Passport", "Phone", "Date", "Time", "Membership", "Payment Method", "Paid?");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("%-5s %-20s %-15s %-15s %-12s %-10s %-12s %-15s %-15s %-8s\n",
+                "No.", "Name", "IC/Passport", "Phone", "Date", "Time", "Amount (RM)", "Membership", "Payment Method", "Paid?");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------------------");
 
         // Print each booking in the table
         for (int i = 0; i < bookings.size(); i++) {
             Booking b = bookings.get(i);
-            System.out.printf("%-5d %-20s %-15s %-15s %-12s %-10s %-15s %-15s %-5s\n",
+            System.out.printf("%-5d %-20s %-15s %-15s %-12s %-10s %-12.2f %-15s %-15s %-8s\n",
                     i + 1,
                     b.getName(),
                     b.getIcPass(),
                     b.getPhone(),
                     b.getDate(),
                     b.getTime(),
+                    b.getAmount(),
                     b.getMembershipType(),
                     b.getPaymentMethod(),
                     b.getPaymentStatus() ? "Yes" : "No");
         }
         System.out.println("\n");
     }
+
 
     public void updatePaymentStatus(int bookingIndex, boolean status) {
         if (bookingIndex >= 0 && bookingIndex < bookings.size()) {
@@ -226,7 +231,7 @@ class BookingManager {
             String newTime = scanner.nextLine();
 
             if (!checkCapacity(newDate, newTime)) {
-                System.out.println("Cannot reschedule. Time slot is full.");
+                System.out.println("\nCannot reschedule. Time slot is full.\n");
                 return;
             }
 
@@ -248,7 +253,7 @@ class BookingManager {
             }
         }
         if (!found) {
-            System.out.println("No bookings found for the date " + date);
+            System.out.println("No bookings found for the date " + date + "\n");
         }
     }
 
@@ -467,12 +472,12 @@ public class gymtest2 {
 		                amount = 1000;
 		                break;
 		            } else {
-		                System.out.println("Invalid option. Please choose 1 for Monthly or 2 for Annually.");
+		                System.out.println("\nInvalid option. Please choose 1 for Monthly or 2 for Annually.");
 		            }
 		        }
 		        break;
 		    } else {
-		        System.out.println("Invalid option. Please choose 1 for Pay Per Day or 2 for Membership.");
+		        System.out.println("\nInvalid option. Please choose 1 for Pay Per Day or 2 for Membership.");
 		    }
 		}
 
@@ -497,7 +502,7 @@ public class gymtest2 {
 		        paymentMethod = "Transfer";
 		        break;
 		    } else {
-		        System.out.println("Invalid option. Please choose 1 for Cash, 2 for QR, or 3 for Transfer.");
+		        System.out.println("\nInvalid option. Please choose 1 for Cash, 2 for QR, or 3 for Transfer.");
 		    }
 		}
 
@@ -530,7 +535,7 @@ public class gymtest2 {
         String paymentInput;
 		boolean status;
 		while (true) {
-		    System.out.print("Payment made? (y/n): ");
+		    System.out.print("\nPayment made? (y/n): ");
 		    paymentInput = scanner.nextLine().trim().toLowerCase();
 
 		    if (paymentInput.equals("y")) {
